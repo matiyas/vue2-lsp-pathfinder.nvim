@@ -1,5 +1,5 @@
-local parser = require("vue-goto-component.parser")
-local path = require("vue-goto-component.path")
+local parser = require("vue2-lsp-pathfinder.parser")
+local path = require("vue2-lsp-pathfinder.path")
 
 local M = {}
 

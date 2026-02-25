@@ -17,7 +17,7 @@ local function find_with_extension(base_path)
 end
 
 function M.find_project_root(start_dir)
-  local config = require("vue-goto-component.config")
+  local config = require("vue2-lsp-pathfinder.config")
   local dir = start_dir
 
   while dir ~= "/" do

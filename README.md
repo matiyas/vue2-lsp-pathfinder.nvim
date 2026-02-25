@@ -1,6 +1,8 @@
-# vue-goto-component.nvim
+# vue2-lsp-pathfinder.nvim
 
-Enhanced go-to-definition for Vue.js files in Neovim.
+Pathfinder for Vue 2 / Nuxt 2 codebases — navigates where LSP can't reach.
+
+Enhanced go-to-definition for Vue.js files in Neovim, filling the gaps left by standard language servers.
 
 ## Why This Plugin?
 
@@ -37,7 +39,7 @@ Basic installation:
 
 ```lua
 {
-  "matiyas/vue-goto-component.nvim",
+  "matiyas/vue2-lsp-pathfinder.nvim",
   ft = "vue",
   opts = {},
 }
@@ -49,11 +51,11 @@ If you're using LazyVim, the default `gd` keymap may override this plugin's keym
 
 ```lua
 {
-  "matiyas/vue-goto-component.nvim",
+  "matiyas/vue2-lsp-pathfinder.nvim",
   ft = { "vue" },
   opts = {},
   config = function()
-    require("vue-goto-component").setup()
+    require("vue2-lsp-pathfinder").setup()
 
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function(args)
@@ -61,7 +63,7 @@ If you're using LazyVim, the default `gd` keymap may override this plugin's keym
           -- Defer to run after LazyVim sets up its keymaps
           vim.defer_fn(function()
             vim.keymap.set("n", "gd", function()
-              require("vue-goto-component").goto_definition()
+              require("vue2-lsp-pathfinder").goto_definition()
             end, { buffer = args.buf, desc = "Go to definition (Vue)" })
           end, 100)
         end
@@ -75,10 +77,10 @@ If you're using LazyVim, the default `gd` keymap may override this plugin's keym
 
 ```lua
 use {
-  "matiyas/vue-goto-component.nvim",
+  "matiyas/vue2-lsp-pathfinder.nvim",
   ft = "vue",
   config = function()
-    require("vue-goto-component").setup()
+    require("vue2-lsp-pathfinder").setup()
   end,
 }
 ```
@@ -86,13 +88,13 @@ use {
 ### vim-plug
 
 ```vim
-Plug 'matiyas/vue-goto-component.nvim'
+Plug 'matiyas/vue2-lsp-pathfinder.nvim'
 ```
 
 Then in your config:
 
 ```lua
-require("vue-goto-component").setup()
+require("vue2-lsp-pathfinder").setup()
 ```
 
 ## LSP Setup
@@ -175,7 +177,7 @@ Open a Vue file and run `:LspInfo`. You should see both `vue_ls` and `vtsls` att
 Default configuration (all options are optional):
 
 ```lua
-require("vue-goto-component").setup({
+require("vue2-lsp-pathfinder").setup({
   -- Function to call when plugin can't resolve the definition
   fallback = vim.lsp.buf.definition,
 
@@ -199,7 +201,7 @@ The plugin automatically maps `gd` (go to definition) in Vue files. When you pre
 You can also call the function directly:
 
 ```lua
-require("vue-goto-component").goto_definition()
+require("vue2-lsp-pathfinder").goto_definition()
 ```
 
 ### Custom Keymap
@@ -208,10 +210,10 @@ If you want to use a different keymap or disable the automatic mapping:
 
 ```lua
 {
-  "matiyas/vue-goto-component.nvim",
+  "matiyas/vue2-lsp-pathfinder.nvim",
   ft = "vue",
   keys = {
-    { "<leader>gd", function() require("vue-goto-component").goto_definition() end, desc = "Vue go to definition" },
+    { "<leader>gd", function() require("vue2-lsp-pathfinder").goto_definition() end, desc = "Vue go to definition" },
   },
   opts = {},
 }
@@ -303,7 +305,7 @@ If you're using LazyVim or another distribution, their default `gd` keymap may o
 Ensure the plugin is loaded for Vue files:
 
 ```lua
-:lua print(vim.inspect(require("lazy").plugins()["vue-goto-component.nvim"]))
+:lua print(vim.inspect(require("lazy").plugins()["vue2-lsp-pathfinder.nvim"]))
 ```
 
 ## Tested Configuration

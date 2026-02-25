@@ -1,6 +1,6 @@
-local config = require("vue-goto-component.config")
-local navigation = require("vue-goto-component.navigation")
-local parser = require("vue-goto-component.parser")
+local config = require("vue2-lsp-pathfinder.config")
+local navigation = require("vue2-lsp-pathfinder.navigation")
+local parser = require("vue2-lsp-pathfinder.parser")
 
 local M = {}
 

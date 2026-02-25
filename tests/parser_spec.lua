@@ -10,7 +10,7 @@ describe("parser", function()
     _G.vim.fn = _G.vim.fn or {}
     _G.vim.api = _G.vim.api or {}
 
-    parser = require("vue-goto-component.parser")
+    parser = require("vue2-lsp-pathfinder.parser")
   end)
 
   describe("kebab_to_pascal", function()

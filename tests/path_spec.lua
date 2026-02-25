@@ -68,8 +68,8 @@ describe("path", function()
     end
 
     -- Need to load config first since path depends on it
-    require("vue-goto-component.config")
-    path = require("vue-goto-component.path")
+    require("vue2-lsp-pathfinder.config")
+    path = require("vue2-lsp-pathfinder.path")
   end)
 
   teardown(function()

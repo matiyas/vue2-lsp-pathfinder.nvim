@@ -1,0 +1,32 @@
+name: Release to LuaRocks
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  luarocks:
+    name: Publish to LuaRocks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Publish to LuaRocks
+        uses: nvim-neorocks/luarocks-tag-release@v7
+        env:
+          LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
+        with:
+          name: vue2-lsp-pathfinder.nvim
+          summary: "Pathfinder for Vue 2 / Nuxt 2 codebases — navigates where LSP can't reach"
+          labels: |
+            neovim
+            vue
+            nuxt
+            lsp
+            navigation
+          copy_directories: |
+            plugin
