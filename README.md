@@ -25,17 +25,49 @@ This plugin handles these cases **before** falling back to the native LSP, givin
 ## Requirements
 
 - Neovim >= 0.9.0
-- A Vue LSP server (volar/vue_ls) is recommended for fallback functionality
+- For LSP fallback functionality (recommended):
+  - `vue-language-server` (vue_ls/Volar) - Vue language server
+  - `vtsls` or `ts_ls` - TypeScript language server (required by vue_ls)
 
 ## Installation
 
-### lazy.nvim
+### lazy.nvim (Recommended)
+
+Basic installation:
 
 ```lua
 {
   "matiyas/vue-goto-component.nvim",
   ft = "vue",
   opts = {},
+}
+```
+
+### LazyVim Users
+
+If you're using LazyVim, the default `gd` keymap may override this plugin's keymap. Use this configuration to ensure the plugin's `gd` takes priority in Vue files:
+
+```lua
+{
+  "matiyas/vue-goto-component.nvim",
+  ft = { "vue" },
+  opts = {},
+  config = function()
+    require("vue-goto-component").setup()
+
+    vim.api.nvim_create_autocmd("LspAttach", {
+      callback = function(args)
+        if vim.bo[args.buf].filetype == "vue" then
+          -- Defer to run after LazyVim sets up its keymaps
+          vim.defer_fn(function()
+            vim.keymap.set("n", "gd", function()
+              require("vue-goto-component").goto_definition()
+            end, { buffer = args.buf, desc = "Go to definition (Vue)" })
+          end, 100)
+        end
+      end,
+    })
+  end,
 }
 ```
 
@@ -62,6 +94,81 @@ Then in your config:
 ```lua
 require("vue-goto-component").setup()
 ```
+
+## LSP Setup
+
+This plugin falls back to `vim.lsp.buf.definition()` when it can't resolve a definition. For the best experience, you should have a working Vue LSP setup.
+
+### Required LSP Servers
+
+Install via Mason (`:MasonInstall`):
+
+```
+:MasonInstall vue-language-server vtsls
+```
+
+Or add to your Mason configuration:
+
+```lua
+{
+  "mason-org/mason.nvim",
+  opts = {
+    ensure_installed = {
+      "vue-language-server",
+      "vtsls",
+    },
+  },
+}
+```
+
+### LSP Configuration
+
+The Vue language server (`vue_ls`) requires a TypeScript language server (`vtsls` or `ts_ls`) to work properly. Here's a working configuration for LazyVim:
+
+```lua
+-- lua/plugins/vue-lsp.lua
+local mason_packages = vim.fn.stdpath("data") .. "/mason/packages"
+
+return {
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        vtsls = {
+          filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact", "vue" },
+          settings = {
+            vtsls = {
+              tsserver = {
+                globalPlugins = {
+                  {
+                    name = "@vue/typescript-plugin",
+                    location = mason_packages .. "/vue-language-server/node_modules/@vue/language-server",
+                    languages = { "vue" },
+                    configNamespace = "typescript",
+                    enableForWorkspaceTypeScriptVersions = true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        vue_ls = {
+          filetypes = { "vue" },
+          init_options = {
+            typescript = {
+              tsdk = mason_packages .. "/vtsls/node_modules/@vtsls/language-server/node_modules/typescript/lib",
+            },
+          },
+        },
+      },
+    },
+  },
+}
+```
+
+### Verifying LSP Setup
+
+Open a Vue file and run `:LspInfo`. You should see both `vue_ls` and `vtsls` attached to the buffer.
 
 ## Configuration
 
@@ -170,6 +277,45 @@ export default {
   }
 }
 ```
+
+## Troubleshooting
+
+### "method textDocument/definition is not supported by any of the servers"
+
+This error means no LSP server with definition support is attached. Make sure you have `vue-language-server` and `vtsls` installed and configured. See [LSP Setup](#lsp-setup).
+
+### "Could not find ts_ls, vtsls, or typescript-tools lsp client required by vue_ls"
+
+The Vue language server requires a TypeScript language server. Install `vtsls`:
+
+```
+:MasonInstall vtsls
+```
+
+And ensure it's configured to attach to Vue files (see [LSP Configuration](#lsp-configuration)).
+
+### gd not working / using wrong keymap
+
+If you're using LazyVim or another distribution, their default `gd` keymap may override this plugin. Use the [LazyVim Users](#lazyvim-users) configuration to set up the keymap with proper priority.
+
+### Plugin not loading
+
+Ensure the plugin is loaded for Vue files:
+
+```lua
+:lua print(vim.inspect(require("lazy").plugins()["vue-goto-component.nvim"]))
+```
+
+## Tested Configuration
+
+This plugin has been primarily tested with:
+
+- **Neovim**: 0.10.x / 0.11.x
+- **Plugin Manager**: lazy.nvim with LazyVim
+- **LSP Servers**: vue-language-server (vue_ls) + vtsls
+- **Vue Version**: Vue 2 with Options API, Nuxt 2
+
+While the plugin should work with other configurations (Vetur, ts_ls, Vue 3 Composition API), these have not been extensively tested. Contributions and bug reports for other setups are welcome!
 
 ## License
 
