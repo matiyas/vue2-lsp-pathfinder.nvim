@@ -319,6 +319,35 @@ This plugin has been primarily tested with:
 
 While the plugin should work with other configurations (Vetur, ts_ls, Vue 3 Composition API), these have not been extensively tested. Contributions and bug reports for other setups are welcome!
 
+## Contributing
+
+Contributions are welcome! Here's how you can help:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests (`busted tests/`)
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+### Development
+
+```bash
+# Install test dependencies
+luarocks install busted
+luarocks install luassert
+
+# Run tests
+busted tests/ --verbose
+
+# Check formatting
+stylua --check lua/ plugin/
+
+# Run linter
+luacheck lua/ plugin/
+```
+
 ## License
 
 MIT
