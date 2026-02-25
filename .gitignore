@@ -1,0 +1,4 @@
+*.log
+.luarocks/
+lua_modules/
+.luacheckcache
