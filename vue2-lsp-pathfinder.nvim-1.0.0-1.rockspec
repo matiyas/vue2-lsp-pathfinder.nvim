@@ -26,5 +26,5 @@ source = {
 
 build = {
   type = "builtin",
-  copy_directories = { "plugin" },
+  copy_directories = { "lua", "plugin" },
 }

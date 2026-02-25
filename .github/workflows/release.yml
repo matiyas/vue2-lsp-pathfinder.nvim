@@ -29,4 +29,5 @@ jobs:
             lsp
             navigation
           copy_directories: |
+            lua
             plugin
