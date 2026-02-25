@@ -17,6 +17,7 @@ jobs:
         uses: JohnnyMorganz/stylua-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
           args: --check lua/ plugin/
 
   luacheck:
@@ -28,7 +29,7 @@ jobs:
       - name: Setup Lua
         uses: leafo/gh-actions-lua@v10
         with:
-          luaVersion: "luajit-2.1"
+          luaVersion: "5.1"
 
       - name: Setup LuaRocks
         uses: leafo/gh-actions-luarocks@v4
