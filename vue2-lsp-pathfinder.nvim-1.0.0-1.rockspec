@@ -1,6 +1,6 @@
 rockspec_format = "3.0"
 package = "vue2-lsp-pathfinder.nvim"
-version = "scm-1"
+version = "1.0.0-1"
 
 description = {
   summary = "Pathfinder for Vue 2 / Nuxt 2 codebases — navigates where LSP can't reach",
@@ -21,6 +21,7 @@ dependencies = {
 
 source = {
   url = "git://github.com/matiyas/vue2-lsp-pathfinder.nvim.git",
+  tag = "v1.0.0",
 }
 
 build = {
