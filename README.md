@@ -1,5 +1,9 @@
 # vue2-lsp-pathfinder.nvim
 
+[![CI](https://github.com/matiyas/vue2-lsp-pathfinder.nvim/actions/workflows/test.yml/badge.svg)](https://github.com/matiyas/vue2-lsp-pathfinder.nvim/actions/workflows/test.yml)
+[![LuaRocks](https://img.shields.io/luarocks/v/matiyas/vue2-lsp-pathfinder.nvim?logo=lua&color=purple)](https://luarocks.org/modules/matiyas/vue2-lsp-pathfinder.nvim)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Pathfinder for Vue 2 / Nuxt 2 codebases — navigates where LSP can't reach.
 
 Enhanced go-to-definition for Vue.js files in Neovim, filling the gaps left by standard language servers.
