@@ -1,4 +1,4 @@
-name: Release to LuaRocks
+name: Release
 
 on:
   push:
@@ -6,14 +6,48 @@ on:
       - "v*"
 
 jobs:
-  luarocks:
-    name: Publish to LuaRocks
+  release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -z "$PREV_TAG" ]; then
+            COMMITS=$(git log --pretty=format:"- %s" HEAD)
+          else
+            COMMITS=$(git log --pretty=format:"- %s" ${PREV_TAG}..HEAD)
+          fi
+          echo "commits<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMITS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: false
+          body: |
+            ## Changes
+
+            ${{ steps.changelog.outputs.commits }}
+
+            ## Install
+
+            Using [lazy.nvim](https://github.com/folke/lazy.nvim):
+            ```lua
+            { "matiyas/vue2-lsp-pathfinder.nvim" }
+            ```
+
+            Using [LuaRocks](https://luarocks.org/modules/matiyas/vue2-lsp-pathfinder.nvim):
+            ```
+            luarocks install vue2-lsp-pathfinder.nvim
+            ```
 
       - name: Publish to LuaRocks
         uses: nvim-neorocks/luarocks-tag-release@v7
